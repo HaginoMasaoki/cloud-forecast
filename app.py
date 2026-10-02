@@ -1,4 +1,3 @@
-%%writefile app.py
 import time
 import os
 import geopandas as gpd
