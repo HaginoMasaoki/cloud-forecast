@@ -178,16 +178,17 @@ for idx, t_item in enumerate(time_list):
     avg_mid = np.mean([loc["hourly"]["cloud_cover_mid"][idx] for loc in weather_response])
     avg_high = np.mean([loc["hourly"]["cloud_cover_high"][idx] for loc in weather_response])
     
-    # 観測適性判定 (〇 / △ / ×)
-    rating = "〇 (Clear)" if avg_total <= 5 else ("△ (Partly)" if avg_total <= 10 else "× (Cloudy)")
+    # 観測適性判定 (5%以下: 〇 / 20%以下: △ / 20%超: ×)
+    rating = "〇 (Clear)" if avg_total <= 5 else ("△ (Partly)" if avg_total <= 20 else "× (Cloudy)")
     
+    # 列の順序：Time の直後に Rating を配置
     summary_data.append({
         "Time (JST)": t_item.replace("T", " "),
+        "Rating": rating,
         "Total Cloud (%)": round(avg_total, 1),
         "Low Cloud (%)": round(avg_low, 1),
         "Mid Cloud (%)": round(avg_mid, 1),
-        "High Cloud (%)": round(avg_high, 1),
-        "Rating": rating
+        "High Cloud (%)": round(avg_high, 1)
     })
 
 df_summary = pd.DataFrame(summary_data)
